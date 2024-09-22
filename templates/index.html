@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUTURE</title>
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <div class="system-info">
+            <span id="cpuUsage">CPU 0%</span>
+            <span id="gpuUsage">GPU 0%</span>
+            <span id="ramUsage">RAM 0GB</span>
+            <span id="romUsage">ROM 0GB</span>
+            <span id="nextUpdate">00:00</span>
+        </div>
+        <nav class="header">
+            <div class="toggle-group">
+                <div class="toggle-container">
+                    <span class="toggle-label">Work</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="workToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label">Download</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="downloadToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label">Upload</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="uploadToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="left-side">
+                <table id="channelTable">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Last Video Title</th>
+                            <th>Last Video Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="right-side">
+                <div class="settings">
+                    <h2>Settings</h2>
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <label for="apiYouTube">API YouTube:</label>
+                            <input type="text" id="apiYouTube">
+                        </div>
+                        <div class="setting-group">
+                            <label for="apiVK">API VK:</label>
+                            <input type="text" id="apiVK">
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label for="parsingTime">Parsing time (Minutes):</label>
+                            <input type="number" id="parsingTime" min="1">
+                        </div>
+                        <div class="setting-group">
+                            <label for="groupId">Group ID:</label>
+                            <input type="text" id="groupId">
+                        </div>
+                        <div class="setting-group">
+                            <label for="tgIdUser">TG ID USER:</label>
+                            <input type="text" id="tgIdUser">
+                        </div>
+                        <div class="setting-group">
+                            <label for="tgBotToken">TG Bot Token:</label>
+                            <input type="text" id="tgBotToken">
+                        </div>
+                        <div class="setting-group">
+                            <label for="telegramNotification">Telegram notification:</label>
+                            <select id="telegramNotification">
+                                <option value="off">Off</option>
+                                <option value="on">On</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label for="proxyToggle">Use Proxy:</label>
+                            <input type="checkbox" id="proxyToggle">
+                        </div>
+                    </div>
+                    <button onclick="saveSettings()">Save Settings</button>
+                </div>
+                <div class="posting-settings">
+                    <h2>Настройки постинга</h2>
+                    <button onclick="showTitleSettingsModal()">Title video</button>
+                </div>
+                <div class="logs-block">
+                    <h2>Логи</h2>
+                    <textarea id="logsArea" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="pagination">
+                Каналов: <span id="totalRecords">0</span>
+                <select id="recordsPerPage" onchange="changeRecordsPerPage()">
+                    <option value="10">10</option>
+                    <option value="20">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div class="controls">
+                <button onclick="showAddModal()">Add</button>
+                <button onclick="showRemoveModal()">Remove</button>
+                <button onclick="updateChannels()">Update</button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

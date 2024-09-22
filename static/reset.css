@@ -1,0 +1,105 @@
+/* Reset CSS */
+
+/* Удаление отступов, полей и границ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* HTML5 elements */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
+    display: block;
+}
+
+audio, canvas, progress, video {
+    display: inline-block;
+}
+
+/* Скрытие элементов, которые сдаются браузерам как неизвестные или неподдерживаемые */
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+[hidden], template {
+    display: none;
+}
+
+a {
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:active, a:hover {
+    outline: 0;
+}
+
+/* Обнуляем стили для `lists` */
+ul, ol {
+    list-style: none;
+}
+
+/* Полное обнуление шрифтов */
+body, button, input, select, textarea {
+    font-family: sans-serif;
+    font-size: 100%;
+    line-height: 1.15;
+    color: inherit;
+}
+
+/* Выравниваем вложенные элементы в таблицах */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Сбрасываем стили для img, embded и т.д. */
+img {
+    border-style: none;
+    max-width: 100%;
+}
+
+button, input, optgroup, select, textarea {
+    margin: 0;
+}
+
+/* Гарантируем единую границу градиентов и стилев */
+button, html input[type="button"], input[type="reset"], input[type="submit"] {
+    cursor: pointer;
+    -webkit-appearance: button;
+}
+
+button[disabled], html input[disabled] {
+    cursor: default;
+}
+
+button::-moz-focus-inner, input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+textarea {
+    overflow: auto;
+    resize: vertical;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote::before, blockquote::after, q::before, q::after {
+    content: '';
+    content: none;
+}
+
+/* Гарантируем, что form встраивается */
+form {
+    display: block;
+    margin-top: 0em;
+}
+
+
+
+
+

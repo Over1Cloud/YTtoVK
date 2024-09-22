@@ -1,0 +1,309 @@
+2024-09-14 21:24:53,130 - INFO - Settings saved successfully
+2024-09-14 21:24:53,130 - INFO - Loaded settings: {'apiYouTube': 'AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q', 'apiVK': 'vk1.a.KAGzKngpmLJSap0sZqqf7BswfwVZbMn9Tcsw1kYSNECp7g6HlwsPk__l0VZeWpFqRIXArmzAF7SJTUrplfjSYNQUZg_A0nrcmCqZQgOUDOSRQz6_cfgpZ33gPTLD7EujqTRGbW2VVj-a6vdaOxY2QQLGw0gSkNMgIdDY1zcEOFZ_-0KPBJx6_Swk8pkfR0O0yEzDNJ0YTvR0eoGIe-VSlA', 'groupId': '209772977', 'parsingTime': '60', 'tgIdUser': '589267353', 'tgBotToken': '7502038150:AAGaMN4CEUyVvhMsYIlzyXaGbbBvpLsWWhM', 'telegramNotification': 'on', 'workToggle': True, 'downloadToggle': True, 'uploadToggle': True, 'proxyToggle': True, 'PostingTitle': 'рџ”Ґ @video - @author'}
+2024-09-14 21:24:53,134 - ERROR - Произошла непредвиденная ошибка:
+Traceback (most recent call last):
+  File "E:\FUTURE\app.py", line 665, in <module>
+    upload_thread = threading.Thread(target=process_uploads)
+NameError: name 'threading' is not defined
+2024-09-14 21:24:53,134 - INFO - Selected proxy: 45.155.203.198:8000:CV41Ds:o2MzrQ
+2024-09-14 21:24:53,141 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 21:24:53,145 - INFO - YouTube API initialized successfully
+2024-09-14 21:24:53,145 - INFO - Обработка канала: {'URL': 'youtube.com/channel/UCpnkp_D4FLPCiXOmDhoAeYA', 'Title': 'UnusualVideos', 'LastVideoURL': 'https://www.youtube.com/watch?v=-0hrJMtf7Ik', 'LastVideoTITLE': 'UNUSUAL MEMES COMPILATION V286', 'LastVideoDateTime': '2024-09-10T09:19:29Z', 'status': 'Error_Download'}
+2024-09-14 21:24:53,145 - INFO - ID канала: UCpnkp_D4FLPCiXOmDhoAeYA
+2024-09-14 21:24:53,147 - DEBUG - URL being requested: GET https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUpnkp_D4FLPCiXOmDhoAeYA&maxResults=1&key=AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q&alt=json
+2024-09-14 21:26:12,490 - INFO - Settings saved successfully
+2024-09-14 21:26:12,491 - INFO - Loaded settings: {'apiYouTube': 'AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q', 'apiVK': 'vk1.a.KAGzKngpmLJSap0sZqqf7BswfwVZbMn9Tcsw1kYSNECp7g6HlwsPk__l0VZeWpFqRIXArmzAF7SJTUrplfjSYNQUZg_A0nrcmCqZQgOUDOSRQz6_cfgpZ33gPTLD7EujqTRGbW2VVj-a6vdaOxY2QQLGw0gSkNMgIdDY1zcEOFZ_-0KPBJx6_Swk8pkfR0O0yEzDNJ0YTvR0eoGIe-VSlA', 'groupId': '209772977', 'parsingTime': '60', 'tgIdUser': '589267353', 'tgBotToken': '7502038150:AAGaMN4CEUyVvhMsYIlzyXaGbbBvpLsWWhM', 'telegramNotification': 'on', 'workToggle': True, 'downloadToggle': True, 'uploadToggle': True, 'proxyToggle': True, 'PostingTitle': 'рџ”Ґ @video - @author'}
+2024-09-14 21:26:12,494 - INFO - Selected proxy: 45.155.203.198:8000:CV41Ds:o2MzrQ
+2024-09-14 21:26:12,499 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 21:26:12,503 - INFO - YouTube API initialized successfully
+2024-09-14 21:26:12,503 - INFO - Обработка канала: {'URL': 'youtube.com/channel/UCpnkp_D4FLPCiXOmDhoAeYA', 'Title': 'UnusualVideos', 'LastVideoURL': 'https://www.youtube.com/watch?v=-0hrJMtf7Ik', 'LastVideoTITLE': 'UNUSUAL MEMES COMPILATION V286', 'LastVideoDateTime': '2024-09-10T09:19:29Z', 'status': 'Error_Download'}
+2024-09-14 21:26:12,504 - INFO - ID канала: UCpnkp_D4FLPCiXOmDhoAeYA
+2024-09-14 21:26:12,505 - DEBUG - URL being requested: GET https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUpnkp_D4FLPCiXOmDhoAeYA&maxResults=1&key=AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q&alt=json
+2024-09-14 21:26:12,565 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-09-14 21:26:12,565 - INFO - [33mPress CTRL+C to quit[0m
+2024-09-14 21:26:12,568 - INFO -  * Restarting with stat
+2024-09-14 21:26:14,070 - DEBUG - Попытка скачивания видео -0hrJMtf7Ik
+2024-09-14 21:26:14,070 - INFO - Selected proxy: 45.155.203.198:8000:CV41Ds:o2MzrQ
+2024-09-14 21:26:15,145 - INFO - Settings saved successfully
+2024-09-14 21:26:15,145 - INFO - Loaded settings: {'apiYouTube': 'AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q', 'apiVK': 'vk1.a.KAGzKngpmLJSap0sZqqf7BswfwVZbMn9Tcsw1kYSNECp7g6HlwsPk__l0VZeWpFqRIXArmzAF7SJTUrplfjSYNQUZg_A0nrcmCqZQgOUDOSRQz6_cfgpZ33gPTLD7EujqTRGbW2VVj-a6vdaOxY2QQLGw0gSkNMgIdDY1zcEOFZ_-0KPBJx6_Swk8pkfR0O0yEzDNJ0YTvR0eoGIe-VSlA', 'groupId': '209772977', 'parsingTime': '60', 'tgIdUser': '589267353', 'tgBotToken': '7502038150:AAGaMN4CEUyVvhMsYIlzyXaGbbBvpLsWWhM', 'telegramNotification': 'on', 'workToggle': True, 'downloadToggle': True, 'uploadToggle': True, 'proxyToggle': True, 'PostingTitle': 'рџ”Ґ @video - @author'}
+2024-09-14 21:26:15,151 - INFO - Selected proxy: 45.155.203.198:8000:CV41Ds:o2MzrQ
+2024-09-14 21:26:15,157 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 21:26:15,162 - INFO - YouTube API initialized successfully
+2024-09-14 21:26:15,163 - INFO - Обработка канала: {'URL': 'youtube.com/channel/UCpnkp_D4FLPCiXOmDhoAeYA', 'Title': 'UnusualVideos', 'LastVideoURL': 'https://www.youtube.com/watch?v=-0hrJMtf7Ik', 'LastVideoTITLE': 'UNUSUAL MEMES COMPILATION V286', 'LastVideoDateTime': '2024-09-10T09:19:29Z', 'status': 'Error_Download'}
+2024-09-14 21:26:15,163 - INFO - ID канала: UCpnkp_D4FLPCiXOmDhoAeYA
+2024-09-14 21:26:15,165 - DEBUG - URL being requested: GET https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUpnkp_D4FLPCiXOmDhoAeYA&maxResults=1&key=AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q&alt=json
+2024-09-14 21:26:15,170 - WARNING -  * Debugger is active!
+2024-09-14 21:26:15,174 - INFO -  * Debugger PIN: 126-056-566
+2024-09-14 21:26:15,399 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:15] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:26:16,694 - DEBUG - Попытка скачивания видео -0hrJMtf7Ik
+2024-09-14 21:26:16,694 - INFO - Selected proxy: 45.155.203.198:8000:CV41Ds:o2MzrQ
+2024-09-14 21:26:17,196 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:17] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:26:19,662 - INFO - Видео успешно скачано: channels\UnusualVideos\UNUSUAL MEMES COMPILATION V286.mp4
+2024-09-14 21:26:21,663 - INFO - Channels saved successfully
+2024-09-14 21:26:22,242 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:22] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:26:22,347 - INFO - Видео успешно скачано: channels\UnusualVideos\UNUSUAL MEMES COMPILATION V286.mp4
+2024-09-14 21:26:24,349 - INFO - Channels saved successfully
+2024-09-14 21:26:27,198 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:27] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:26:32,197 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:32] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:26:32,262 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:32] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:26:37,196 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:37] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:26:42,203 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:42] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:26:47,189 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:47] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:26:52,191 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:52] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:26:57,198 - INFO - 127.0.0.1 - - [14/Sep/2024 21:26:57] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:02,199 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:02] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:02,256 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:02] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:27:07,200 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:07] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:12,202 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:12] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:17,196 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:17] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:22,203 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:22] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:26,505 - INFO - Видео успешно загружено в ВК: {'access_key': '7359fff769f17b83f9', 'description': '', 'owner_id': -209772977, 'title': 'рџ”Ґ UNUSUAL MEMES COMPILATION V286 - UnusualVideos', 'video_id': 456239105, 'video_hash': 'c8be27318f999a6b87', 'size': 82589122, 'direct_link': 'https://vkvd184.mycdn.me/?expires=1726597647412&srcIp=31.185.7.249&pr=40&srcAg=UNKNOWN&ms=185.226.52.189&type=4&sig=QlKVStGfUCA&ct=27&urls=185.226.53.189&clientType=14&appId=512000384397&id=7051911170600'}
+2024-09-14 21:27:27,202 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:27] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:32,195 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:32] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:32,250 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:32] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:27:37,238 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:37] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:38,514 - INFO - Видео успешно загружено в ВК: {'access_key': '499f739ccea733899c', 'description': '', 'owner_id': -209772977, 'title': 'рџ”Ґ UNUSUAL MEMES COMPILATION V286 - UnusualVideos', 'video_id': 456239107, 'video_hash': '4b2dec5bb6466bbf5f', 'size': 82589122, 'direct_link': 'https://vkvd527.okcdn.ru/?expires=1726597659418&srcIp=31.185.7.249&pr=40&srcAg=UNKNOWN&ms=185.226.55.165&type=4&sig=-An-662LGW8&ct=27&urls=185.226.52.172&clientType=14&appId=512000384397&id=7265212041970'}
+2024-09-14 21:27:41,400 - INFO - Видео успешно загружено в ВК: {'access_key': 'e73b29a790c1f210e6', 'description': '', 'owner_id': -209772977, 'title': 'рџ”Ґ UNUSUAL MEMES COMPILATION V286 - UnusualVideos', 'video_id': 456239106, 'video_hash': '481d26972d468dc4cc', 'size': 82589122, 'direct_link': 'https://vkvd135.mycdn.me/?expires=1726597662307&srcIp=31.185.7.249&pr=40&srcAg=UNKNOWN&ms=45.136.21.137&type=4&sig=6IYuCxlk7oI&ct=27&urls=185.226.55.193&clientType=14&appId=512000384397&id=6749279619585'}
+2024-09-14 21:27:42,127 - INFO - Видео успешно загружено в ВК: {'access_key': 'e709fb7ef6467822ab', 'description': '', 'owner_id': -209772977, 'title': 'рџ”Ґ UNUSUAL MEMES COMPILATION V286 - UnusualVideos', 'video_id': 456239108, 'video_hash': 'c0befc56c1b9ccc2c4', 'size': 82589122, 'direct_link': 'https://vkvd489.mycdn.me/?expires=1726597663038&srcIp=31.185.7.249&pr=40&srcAg=UNKNOWN&ms=45.136.22.189&type=4&sig=cS_J_6GsF3A&ct=27&urls=45.136.21.155&clientType=14&appId=512000384397&id=7065767840472'}
+2024-09-14 21:27:42,232 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:42] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:47,244 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:47] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:52,242 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:52] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:27:57,246 - INFO - 127.0.0.1 - - [14/Sep/2024 21:27:57] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:02,240 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:02] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:02,314 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:02] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:28:07,241 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:07] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:12,234 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:12] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:17,229 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:17] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:22,231 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:22] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:27,188 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:27] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:28,868 - INFO - Settings saved successfully
+2024-09-14 21:28:28,868 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:28] "POST /api/settings HTTP/1.1" 200 -
+2024-09-14 21:28:29,981 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:29] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 21:28:32,208 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:32] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:32,277 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:32] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:28:37,195 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:37] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:42,199 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:42] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:47,193 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:47] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:52,040 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET / HTTP/1.1" 200 -
+2024-09-14 21:28:52,215 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "[36mGET /static/reset.css HTTP/1.1[0m" 304 -
+2024-09-14 21:28:52,257 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2024-09-14 21:28:52,262 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2024-09-14 21:28:52,279 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 21:28:52,281 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/settings HTTP/1.1" 200 -
+2024-09-14 21:28:52,298 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 21:28:52,300 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 21:28:52,303 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/settings HTTP/1.1" 200 -
+2024-09-14 21:28:52,307 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:28:52,308 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 21:28:52,312 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 21:28:52,317 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/settings HTTP/1.1" 200 -
+2024-09-14 21:28:52,319 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 21:28:52,378 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:28:52,445 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:28:52,507 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:52] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:28:57,275 - INFO - 127.0.0.1 - - [14/Sep/2024 21:28:57] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:02,278 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:02] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:07,271 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:07] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:12,278 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:12] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:17,273 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:17] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:19,726 - INFO - Обработка канала: {'URL': 'youtube.com/channel/UCpnkp_D4FLPCiXOmDhoAeYA', 'Title': 'UnusualVideos', 'LastVideoURL': 'https://www.youtube.com/watch?v=-0hrJMtf7Ik', 'LastVideoTITLE': 'UNUSUAL MEMES COMPILATION V286', 'LastVideoDateTime': '2024-09-10T09:19:29Z', 'status': 'Downloaded'}
+2024-09-14 21:29:19,727 - INFO - ID канала: UCpnkp_D4FLPCiXOmDhoAeYA
+2024-09-14 21:29:19,727 - DEBUG - URL being requested: GET https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUpnkp_D4FLPCiXOmDhoAeYA&maxResults=1&key=AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q&alt=json
+2024-09-14 21:29:19,970 - INFO - Channels saved successfully
+2024-09-14 21:29:19,971 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:19] "GET /api/update HTTP/1.1" 200 -
+2024-09-14 21:29:19,974 - INFO - Обработка канала: {'URL': 'youtube.com/channel/UCpnkp_D4FLPCiXOmDhoAeYA', 'Title': 'UnusualVideos', 'LastVideoURL': 'https://www.youtube.com/watch?v=-0hrJMtf7Ik', 'LastVideoTITLE': 'UNUSUAL MEMES COMPILATION V286', 'LastVideoDateTime': '2024-09-10T09:19:29Z', 'status': 'Нет новых видео'}
+2024-09-14 21:29:19,974 - INFO - ID канала: UCpnkp_D4FLPCiXOmDhoAeYA
+2024-09-14 21:29:19,975 - DEBUG - URL being requested: GET https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUpnkp_D4FLPCiXOmDhoAeYA&maxResults=1&key=AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q&alt=json
+2024-09-14 21:29:19,979 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:19] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 21:29:19,980 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:19] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 21:29:20,419 - INFO - Channels saved successfully
+2024-09-14 21:29:20,420 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:20] "GET /api/update HTTP/1.1" 200 -
+2024-09-14 21:29:20,427 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:20] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 21:29:20,428 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:20] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 21:29:22,290 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:22] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:22,351 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:22] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:29:23,868 - INFO - Обработка канала: {'URL': 'youtube.com/channel/UCpnkp_D4FLPCiXOmDhoAeYA', 'Title': 'UnusualVideos', 'LastVideoURL': 'https://www.youtube.com/watch?v=-0hrJMtf7Ik', 'LastVideoTITLE': 'UNUSUAL MEMES COMPILATION V286', 'LastVideoDateTime': '2024-09-10T09:19:29Z', 'status': 'Нет новых видео'}
+2024-09-14 21:29:23,868 - INFO - ID канала: UCpnkp_D4FLPCiXOmDhoAeYA
+2024-09-14 21:29:23,869 - DEBUG - URL being requested: GET https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUpnkp_D4FLPCiXOmDhoAeYA&maxResults=1&key=AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q&alt=json
+2024-09-14 21:29:24,284 - INFO - Channels saved successfully
+2024-09-14 21:29:24,285 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:24] "GET /api/update HTTP/1.1" 200 -
+2024-09-14 21:29:24,290 - INFO - Обработка канала: {'URL': 'youtube.com/channel/UCpnkp_D4FLPCiXOmDhoAeYA', 'Title': 'UnusualVideos', 'LastVideoURL': 'https://www.youtube.com/watch?v=-0hrJMtf7Ik', 'LastVideoTITLE': 'UNUSUAL MEMES COMPILATION V286', 'LastVideoDateTime': '2024-09-10T09:19:29Z', 'status': 'Нет новых видео'}
+2024-09-14 21:29:24,290 - INFO - ID канала: UCpnkp_D4FLPCiXOmDhoAeYA
+2024-09-14 21:29:24,291 - DEBUG - URL being requested: GET https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUpnkp_D4FLPCiXOmDhoAeYA&maxResults=1&key=AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q&alt=json
+2024-09-14 21:29:24,296 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:24] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 21:29:24,297 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:24] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 21:29:24,699 - INFO - Channels saved successfully
+2024-09-14 21:29:24,699 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:24] "GET /api/update HTTP/1.1" 200 -
+2024-09-14 21:29:24,705 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:24] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 21:29:24,707 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:24] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 21:29:27,271 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:27] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:32,280 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:32] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:37,284 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:37] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:42,275 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:42] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:48,239 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:48] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:53,241 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:53] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:29:53,341 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:53] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:29:58,284 - INFO - 127.0.0.1 - - [14/Sep/2024 21:29:58] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:03,233 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:03] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:08,246 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:08] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:13,228 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:13] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:18,242 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:18] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:23,249 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:23] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:23,318 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:23] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:30:28,232 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:28] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:33,234 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:33] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:38,238 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:38] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:43,236 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:43] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:30:53,307 - INFO - 127.0.0.1 - - [14/Sep/2024 21:30:53] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:31:19,238 - INFO - 127.0.0.1 - - [14/Sep/2024 21:31:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:32:19,242 - INFO - 127.0.0.1 - - [14/Sep/2024 21:32:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:32:19,325 - INFO - 127.0.0.1 - - [14/Sep/2024 21:32:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:33:19,298 - INFO - 127.0.0.1 - - [14/Sep/2024 21:33:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:33:19,414 - INFO - 127.0.0.1 - - [14/Sep/2024 21:33:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:34:19,265 - INFO - 127.0.0.1 - - [14/Sep/2024 21:34:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:34:19,363 - INFO - 127.0.0.1 - - [14/Sep/2024 21:34:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:35:19,242 - INFO - 127.0.0.1 - - [14/Sep/2024 21:35:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:35:19,322 - INFO - 127.0.0.1 - - [14/Sep/2024 21:35:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:36:19,245 - INFO - 127.0.0.1 - - [14/Sep/2024 21:36:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:36:19,341 - INFO - 127.0.0.1 - - [14/Sep/2024 21:36:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:37:19,327 - INFO - 127.0.0.1 - - [14/Sep/2024 21:37:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:37:19,444 - INFO - 127.0.0.1 - - [14/Sep/2024 21:37:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 21:38:19,249 - INFO - 127.0.0.1 - - [14/Sep/2024 21:38:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 21:38:19,350 - INFO - 127.0.0.1 - - [14/Sep/2024 21:38:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:16:01,729 - INFO - Settings saved successfully
+2024-09-14 23:16:01,730 - INFO - Loaded settings: {'apiYouTube': 'AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q', 'apiVK': 'vk1.a.KAGzKngpmLJSap0sZqqf7BswfwVZbMn9Tcsw1kYSNECp7g6HlwsPk__l0VZeWpFqRIXArmzAF7SJTUrplfjSYNQUZg_A0nrcmCqZQgOUDOSRQz6_cfgpZ33gPTLD7EujqTRGbW2VVj-a6vdaOxY2QQLGw0gSkNMgIdDY1zcEOFZ_-0KPBJx6_Swk8pkfR0O0yEzDNJ0YTvR0eoGIe-VSlA', 'groupId': '209772977', 'parsingTime': '60', 'tgIdUser': '589267353', 'tgBotToken': '7502038150:AAGaMN4CEUyVvhMsYIlzyXaGbbBvpLsWWhM', 'telegramNotification': 'on', 'workToggle': True, 'downloadToggle': True, 'uploadToggle': True, 'proxyToggle': True, 'PostingTitle': '@video - @author'}
+2024-09-14 23:16:01,734 - INFO - Selected proxy: 45.155.203.198:8000:CV41Ds:o2MzrQ
+2024-09-14 23:16:01,740 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 23:16:01,745 - INFO - YouTube API initialized successfully
+2024-09-14 23:16:01,745 - INFO - Обработка канала: {'URL': 'youtube.com/channel/UCpnkp_D4FLPCiXOmDhoAeYA', 'Title': 'UnusualVideos', 'LastVideoURL': 'https://www.youtube.com/watch?v=-0hrJMtf7Ik', 'LastVideoTITLE': 'UNUSUAL MEMES COMPILATION V286', 'LastVideoDateTime': '2024-09-10T09:19:29Z', 'status': 'Нет новых видео'}
+2024-09-14 23:16:01,746 - INFO - ID канала: UCpnkp_D4FLPCiXOmDhoAeYA
+2024-09-14 23:16:01,747 - DEBUG - URL being requested: GET https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUpnkp_D4FLPCiXOmDhoAeYA&maxResults=1&key=AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q&alt=json
+2024-09-14 23:16:01,801 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-09-14 23:16:01,802 - INFO - [33mPress CTRL+C to quit[0m
+2024-09-14 23:16:01,803 - INFO -  * Restarting with stat
+2024-09-14 23:16:03,533 - INFO - Channels saved successfully
+2024-09-14 23:16:04,310 - INFO - Settings saved successfully
+2024-09-14 23:16:04,310 - INFO - Loaded settings: {'apiYouTube': 'AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q', 'apiVK': 'vk1.a.KAGzKngpmLJSap0sZqqf7BswfwVZbMn9Tcsw1kYSNECp7g6HlwsPk__l0VZeWpFqRIXArmzAF7SJTUrplfjSYNQUZg_A0nrcmCqZQgOUDOSRQz6_cfgpZ33gPTLD7EujqTRGbW2VVj-a6vdaOxY2QQLGw0gSkNMgIdDY1zcEOFZ_-0KPBJx6_Swk8pkfR0O0yEzDNJ0YTvR0eoGIe-VSlA', 'groupId': '209772977', 'parsingTime': '60', 'tgIdUser': '589267353', 'tgBotToken': '7502038150:AAGaMN4CEUyVvhMsYIlzyXaGbbBvpLsWWhM', 'telegramNotification': 'on', 'workToggle': True, 'downloadToggle': True, 'uploadToggle': True, 'proxyToggle': True, 'PostingTitle': '@video - @author'}
+2024-09-14 23:16:04,316 - INFO - Selected proxy: 45.155.203.198:8000:CV41Ds:o2MzrQ
+2024-09-14 23:16:04,322 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 23:16:04,328 - INFO - YouTube API initialized successfully
+2024-09-14 23:16:04,328 - INFO - Обработка канала: {'URL': 'youtube.com/channel/UCpnkp_D4FLPCiXOmDhoAeYA', 'Title': 'UnusualVideos', 'LastVideoURL': 'https://www.youtube.com/watch?v=-0hrJMtf7Ik', 'LastVideoTITLE': 'UNUSUAL MEMES COMPILATION V286', 'LastVideoDateTime': '2024-09-10T09:19:29Z', 'status': 'Нет новых видео'}
+2024-09-14 23:16:04,328 - INFO - ID канала: UCpnkp_D4FLPCiXOmDhoAeYA
+2024-09-14 23:16:04,329 - DEBUG - URL being requested: GET https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=UUpnkp_D4FLPCiXOmDhoAeYA&maxResults=1&key=AIzaSyCCV_vYLg6CDk5U87vEe-5yf-y5FRovC4Q&alt=json
+2024-09-14 23:16:04,335 - WARNING -  * Debugger is active!
+2024-09-14 23:16:04,340 - INFO -  * Debugger PIN: 126-056-566
+2024-09-14 23:16:05,894 - INFO - Channels saved successfully
+2024-09-14 23:24:32,350 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET / HTTP/1.1" 200 -
+2024-09-14 23:24:32,539 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2024-09-14 23:24:32,543 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "[36mGET /static/reset.css HTTP/1.1[0m" 304 -
+2024-09-14 23:24:32,544 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2024-09-14 23:24:32,594 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 23:24:32,609 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/settings HTTP/1.1" 200 -
+2024-09-14 23:24:32,612 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 23:24:32,618 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 23:24:32,622 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/settings HTTP/1.1" 200 -
+2024-09-14 23:24:32,622 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:24:32,624 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 23:24:32,629 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/channels HTTP/1.1" 200 -
+2024-09-14 23:24:32,636 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/settings HTTP/1.1" 200 -
+2024-09-14 23:24:32,638 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/status HTTP/1.1" 200 -
+2024-09-14 23:24:32,745 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:24:32,821 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:24:32,900 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:32] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:24:38,242 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:38] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:24:43,234 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:43] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:24:48,229 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:48] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:24:53,227 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:53] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:24:58,240 - INFO - 127.0.0.1 - - [14/Sep/2024 23:24:58] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:25:03,246 - INFO - 127.0.0.1 - - [14/Sep/2024 23:25:03] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:25:03,316 - INFO - 127.0.0.1 - - [14/Sep/2024 23:25:03] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:25:08,238 - INFO - 127.0.0.1 - - [14/Sep/2024 23:25:08] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:25:13,228 - INFO - 127.0.0.1 - - [14/Sep/2024 23:25:13] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:25:18,239 - INFO - 127.0.0.1 - - [14/Sep/2024 23:25:18] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:25:23,236 - INFO - 127.0.0.1 - - [14/Sep/2024 23:25:23] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:25:28,229 - INFO - 127.0.0.1 - - [14/Sep/2024 23:25:28] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:25:33,238 - INFO - 127.0.0.1 - - [14/Sep/2024 23:25:33] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:25:33,333 - INFO - 127.0.0.1 - - [14/Sep/2024 23:25:33] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:26:03,297 - INFO - 127.0.0.1 - - [14/Sep/2024 23:26:03] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:26:19,249 - INFO - 127.0.0.1 - - [14/Sep/2024 23:26:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:26:33,331 - INFO - 127.0.0.1 - - [14/Sep/2024 23:26:33] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:27:19,248 - INFO - 127.0.0.1 - - [14/Sep/2024 23:27:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:27:19,349 - INFO - 127.0.0.1 - - [14/Sep/2024 23:27:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:28:19,251 - INFO - 127.0.0.1 - - [14/Sep/2024 23:28:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:28:19,322 - INFO - 127.0.0.1 - - [14/Sep/2024 23:28:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:29:19,245 - INFO - 127.0.0.1 - - [14/Sep/2024 23:29:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:29:19,354 - INFO - 127.0.0.1 - - [14/Sep/2024 23:29:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:30:19,237 - INFO - 127.0.0.1 - - [14/Sep/2024 23:30:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:30:19,329 - INFO - 127.0.0.1 - - [14/Sep/2024 23:30:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:31:19,246 - INFO - 127.0.0.1 - - [14/Sep/2024 23:31:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:31:19,364 - INFO - 127.0.0.1 - - [14/Sep/2024 23:31:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:32:01,754 - ERROR - Ошибка в процессе проверки и загрузки видео: Expecting value: line 1 column 1 (char 0)
+2024-09-14 23:32:19,245 - INFO - 127.0.0.1 - - [14/Sep/2024 23:32:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:32:19,327 - INFO - 127.0.0.1 - - [14/Sep/2024 23:32:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:33:19,242 - INFO - 127.0.0.1 - - [14/Sep/2024 23:33:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:33:19,339 - INFO - 127.0.0.1 - - [14/Sep/2024 23:33:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:34:19,249 - INFO - 127.0.0.1 - - [14/Sep/2024 23:34:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:34:19,348 - INFO - 127.0.0.1 - - [14/Sep/2024 23:34:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:35:01,759 - ERROR - Ошибка в процессе проверки и загрузки видео: Expecting value: line 1 column 1 (char 0)
+2024-09-14 23:35:19,255 - INFO - 127.0.0.1 - - [14/Sep/2024 23:35:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:35:19,340 - INFO - 127.0.0.1 - - [14/Sep/2024 23:35:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:36:01,759 - ERROR - Ошибка в процессе проверки и загрузки видео: Expecting value: line 1 column 1 (char 0)
+2024-09-14 23:36:19,249 - INFO - 127.0.0.1 - - [14/Sep/2024 23:36:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:36:19,368 - INFO - 127.0.0.1 - - [14/Sep/2024 23:36:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:37:19,248 - INFO - 127.0.0.1 - - [14/Sep/2024 23:37:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:37:19,333 - INFO - 127.0.0.1 - - [14/Sep/2024 23:37:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:38:19,251 - INFO - 127.0.0.1 - - [14/Sep/2024 23:38:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:38:19,313 - INFO - 127.0.0.1 - - [14/Sep/2024 23:38:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:39:19,241 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:39:19,330 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:39:23,236 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:23] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:39:28,232 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:28] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:39:33,245 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:33] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:39:33,321 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:33] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:39:38,231 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:38] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:39:43,234 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:43] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:39:48,236 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:48] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:39:53,242 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:53] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:39:58,241 - INFO - 127.0.0.1 - - [14/Sep/2024 23:39:58] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:03,237 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:03] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:03,308 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:03] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:40:08,237 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:08] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:13,269 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:13] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:18,239 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:18] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:25,769 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:25] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:28,242 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:28] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:33,237 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:33] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:33,311 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:33] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:40:38,240 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:38] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:43,233 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:43] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:48,243 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:48] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:53,230 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:53] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:40:58,243 - INFO - 127.0.0.1 - - [14/Sep/2024 23:40:58] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:41:03,241 - INFO - 127.0.0.1 - - [14/Sep/2024 23:41:03] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:41:03,303 - INFO - 127.0.0.1 - - [14/Sep/2024 23:41:03] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:41:08,234 - INFO - 127.0.0.1 - - [14/Sep/2024 23:41:08] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:41:13,233 - INFO - 127.0.0.1 - - [14/Sep/2024 23:41:13] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:41:18,228 - INFO - 127.0.0.1 - - [14/Sep/2024 23:41:18] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:41:23,245 - INFO - 127.0.0.1 - - [14/Sep/2024 23:41:23] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:42:19,252 - INFO - 127.0.0.1 - - [14/Sep/2024 23:42:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:42:19,326 - INFO - 127.0.0.1 - - [14/Sep/2024 23:42:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:43:19,240 - INFO - 127.0.0.1 - - [14/Sep/2024 23:43:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:43:19,305 - INFO - 127.0.0.1 - - [14/Sep/2024 23:43:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:44:19,262 - INFO - 127.0.0.1 - - [14/Sep/2024 23:44:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:44:19,350 - INFO - 127.0.0.1 - - [14/Sep/2024 23:44:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:45:19,250 - INFO - 127.0.0.1 - - [14/Sep/2024 23:45:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:45:19,317 - INFO - 127.0.0.1 - - [14/Sep/2024 23:45:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:46:19,256 - INFO - 127.0.0.1 - - [14/Sep/2024 23:46:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:46:19,349 - INFO - 127.0.0.1 - - [14/Sep/2024 23:46:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:47:19,251 - INFO - 127.0.0.1 - - [14/Sep/2024 23:47:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:47:19,336 - INFO - 127.0.0.1 - - [14/Sep/2024 23:47:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:48:19,251 - INFO - 127.0.0.1 - - [14/Sep/2024 23:48:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:48:19,319 - INFO - 127.0.0.1 - - [14/Sep/2024 23:48:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:49:19,245 - INFO - 127.0.0.1 - - [14/Sep/2024 23:49:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:49:19,318 - INFO - 127.0.0.1 - - [14/Sep/2024 23:49:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:50:19,254 - INFO - 127.0.0.1 - - [14/Sep/2024 23:50:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:50:19,339 - INFO - 127.0.0.1 - - [14/Sep/2024 23:50:19] "GET /api/system-info HTTP/1.1" 200 -
+2024-09-14 23:51:19,248 - INFO - 127.0.0.1 - - [14/Sep/2024 23:51:19] "GET /api/logs HTTP/1.1" 200 -
+2024-09-14 23:51:19,352 - INFO - 127.0.0.1 - - [14/Sep/2024 23:51:19] "GET /api/system-info HTTP/1.1" 200 -

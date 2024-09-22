@@ -1,0 +1,391 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: #111;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggle-group {
+    display: flex;
+    gap: 20px;
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #333;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #f60;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.toggle-label {
+    font-size: 14px;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+    padding-bottom: 70px; /* Добавьте отступ снизу для контента, чтобы он не перекрывался футером */
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+.left-side {
+    flex: 1;
+}
+
+.right-side {
+    width: 300px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #1f1f1f;
+}
+
+tr:nth-child(even) {
+    background-color: #1a1a1a;
+}
+
+.settings, .analytics {
+    background-color: #1f1f1f;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.settings h2, .analytics h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.setting-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.setting-group label {
+    margin-bottom: 5px;
+    min-height: 2.5em; /* Фиксированная высота для меток */
+    display: flex;
+    align-items: flex-end; /* Выравнивание текста метки по нижнему краю */
+}
+
+.setting-group input[type="text"],
+.setting-group input[type="number"],
+.setting-group select {
+    width: 100%;
+    padding: 8px;
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 3px;
+    height: 36px; /* Увеличенная фиксированная высота для всех инпутов */
+    box-sizing: border-box;
+    font-size: 14px; /* Увеличенный размер шрифта */
+}
+
+.setting-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position-x: calc(100% - 8px);
+    background-position-y: center;
+    padding-right: 30px; /* Место для стрелки */
+}
+
+.settings button {
+    background-color: #f60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.chart-placeholder {
+    background-color: #333;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+    border-radius: 3px;
+}
+
+footer {
+    background-color: #1f1f1f;
+    padding: 10px 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+}
+
+.controls button {
+    background-color: #f60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+}
+
+.pagination select {
+    margin-left: 10px;
+    padding: 5px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+
+.system-info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 12px;
+    color: #888;
+}
+
+.system-info span {
+    margin-right: 10px;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 30px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #1f1f1f;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 5px;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 3px;
+    resize: vertical;
+}
+
+.modal-content button {
+    background-color: #f60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+#channelList {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+#channelList div {
+    margin-bottom: 5px;
+}
+
+.setting-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    vertical-align: middle;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.setting-group input[type="checkbox"]:checked {
+    background-color: #f60;
+    border-color: #f60;
+    position: relative;
+}
+
+.setting-group input[type="checkbox"]:checked::before {
+    content: '\2714';
+    font-size: 14px;
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 3px;
+}
+
+/* ... (существующие стили остаются без изменений) ... */
+
+.logs-block {
+    background-color: #1f1f1f;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.logs-block h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.logs-block textarea {
+    width: 100%;
+    height: 200px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 3px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 12px;
+    resize: vertical;
+}
+
+
+
+.posting-settings {
+    background-color: #1f1f1f;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.posting-settings h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.posting-settings button {
+    background-color: #f60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+/* ... (остальные стили остаются без изменений) ... */
