@@ -32,17 +32,18 @@ async def send_long_message(chat_id, text):
 # Команда /start
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
-    await message.answer("Привет! Пересылай сообщения от девушек, каналов или скрытых аккаунтов, чтобы бот помогал в общении.")
+    await message.answer("Привет! Пересылай текстовые сообщения (включая от ботов), чтобы бот помогал в общении.")
 
-# Обработка пересланных сообщений (не записывает в БД, если ID не найден)
+# Обработка пересланных сообщений от ботов (без записи в БД, игнорируя медиа)
 @dp.message_handler(lambda message: message.forward_from or message.forward_sender_name or message.forward_from_chat)
 async def forwarded_message_handler(message: types.Message):
-    """Обрабатывает пересланные сообщения от пользователей, скрытых аккаунтов и каналов без записи в БД, если ID не определён"""
-    
+    """Обрабатывает пересланные сообщения от пользователей, каналов и ботов, игнорируя медиафайлы."""
+
+    # Определяем ID и имя отправителя
     sender_id = None
     username = "Неизвестно"
 
-    if message.forward_from:  # Обычный пользователь
+    if message.forward_from:  # Обычный пользователь или бот
         sender_id = str(message.forward_from.id)
         username = message.forward_from.username or "Неизвестно"
     elif message.forward_from_chat:  # Канал
@@ -51,13 +52,15 @@ async def forwarded_message_handler(message: types.Message):
     elif message.forward_sender_name:  # Скрытый аккаунт
         username = message.forward_sender_name or "Скрытый пользователь"
 
-    text = message.text or message.caption or "[Нет текста]"
+    # Извлекаем только текст (игнорируем фото, видео, голосовые и т. д.)
+    text = message.text or "[Нет текста]"
 
-    # Если sender_id определён, можно записывать в БД (но сейчас этого не делаем)
-    if sender_id:
-        pass  # Можно добавить запись в БД, если понадобится
+    # Если в пересланном сообщении нет текста, просто игнорируем его
+    if text == "[Нет текста]":
+        await message.answer("В пересланном сообщении нет текста. Бот обрабатывает только текстовые сообщения.")
+        return
 
-    # Кнопки: "Помочь с ответом" и "Анализ анкеты"
+    # Создаём инлайн-кнопки
     keyboard = InlineKeyboardMarkup().add(
         InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{sender_id or 'unknown'}"),
         InlineKeyboardButton("Анализ анкеты", callback_data=f"analyze_{sender_id or 'unknown'}")
@@ -70,10 +73,7 @@ async def forwarded_message_handler(message: types.Message):
 async def reply_to_girl(callback_query: types.CallbackQuery):
     sender_id = callback_query.data.split('_')[1]
 
-    if sender_id == "unknown":
-        response = generate_ai_response("Неизвестный собеседник, данных о предпочтениях нет.")
-    else:
-        response = generate_ai_response("Нет данных для анализа.")  # БД не используется
+    response = generate_ai_response("Нет данных для анализа.") if sender_id == "unknown" else generate_ai_response("Только текст без БД.")
 
     await send_long_message(callback_query.from_user.id, response)
     await callback_query.answer()
@@ -83,10 +83,7 @@ async def reply_to_girl(callback_query: types.CallbackQuery):
 async def analyze_profile_handler(callback_query: types.CallbackQuery):
     sender_id = callback_query.data.split('_')[1]
 
-    if sender_id == "unknown":
-        analysis = analyze_profile_response("Неизвестный собеседник, данных о предпочтениях нет.")
-    else:
-        analysis = analyze_profile_response("Нет данных для анализа.")  # БД не используется
+    analysis = analyze_profile_response("Нет данных для анализа.") if sender_id == "unknown" else analyze_profile_response("Только текст без БД.")
 
     await send_long_message(callback_query.from_user.id, analysis)
     await callback_query.answer()
@@ -102,7 +99,7 @@ def generate_ai_response(preferences):
                 {"role": "system", "content": "Ты помощник в общении."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=1000  # Длинные ответы
+            max_tokens=1000
         )
         return response["choices"][0]["message"]["content"].strip()
     except Exception as e:
