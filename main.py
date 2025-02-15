@@ -40,11 +40,6 @@ async def create_db():
         )''')
         await conn.commit()
 
-# Вместо asyncio.run() используем `on_startup`
-async def on_startup(_):
-    await create_db()
-    logging.info("База данных успешно инициализирована.")
-
 # Команда /start
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
@@ -140,5 +135,9 @@ async def show_girls_list(message: types.Message):
             await message.answer("Произошла ошибка при получении списка девушек.")
 
 # Запуск бота
+async def main():
+    await create_db()  # Теперь инициализация базы данных происходит перед запуском бота
+    executor.start_polling(dp, skip_updates=True)
+
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
+    asyncio.run(main())  # Используем asyncio.run() для запуска всего кода
