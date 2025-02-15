@@ -1,6 +1,5 @@
-import asyncio
 import logging
-import aiosqlite
+import sqlite3
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils import executor
@@ -24,84 +23,100 @@ openai.api_base = 'https://api.deepinfra.com/v1/openai'
 # Логирование
 logging.basicConfig(level=logging.INFO)
 
-# Асинхронное подключение к базе данных
-async def db_connection():
-    return await aiosqlite.connect('preferences.db')
+# Функция для подключения к БД
+def db_connection():
+    conn = sqlite3.connect('preferences.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
-async def create_db():
-    async with await db_connection() as conn:
-        cursor = await conn.cursor()
-        await cursor.execute('''CREATE TABLE IF NOT EXISTS users (user_id INTEGER PRIMARY KEY)''')
-        await cursor.execute('''CREATE TABLE IF NOT EXISTS girls (
-            girl_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            telegram_id INTEGER UNIQUE,
-            username TEXT,
-            preferences TEXT
-        )''')
-        await conn.commit()
+# Функция для создания таблиц
+def create_db():
+    conn = db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+        user_id INTEGER PRIMARY KEY
+    )''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS girls (
+        girl_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        telegram_id INTEGER UNIQUE,
+        username TEXT,
+        preferences TEXT
+    )''')
+    conn.commit()
+    conn.close()
+
+# Создаём базу перед запуском бота
+create_db()
 
 # Команда /start
 @dp.message_handler(commands=['start'])
-async def cmd_start(message: types.Message):
-    async with await db_connection() as conn:
-        cursor = await conn.cursor()
-        await cursor.execute("SELECT user_id FROM users WHERE user_id=?", (message.from_user.id,))
-        user = await cursor.fetchone()
+def cmd_start(message: types.Message):
+    conn = db_connection()
+    cursor = conn.cursor()
 
-        if not user:
-            await cursor.execute("INSERT INTO users (user_id) VALUES (?)", (message.from_user.id,))
-            await conn.commit()
+    cursor.execute("SELECT user_id FROM users WHERE user_id=?", (message.from_user.id,))
+    user = cursor.fetchone()
+
+    if not user:
+        cursor.execute("INSERT INTO users (user_id) VALUES (?)", (message.from_user.id,))
+        conn.commit()
     
-    await message.answer("Привет! Пересылай сообщения от девушек, чтобы бот помогал в общении.")
+    conn.close()
+    message.answer("Привет! Пересылай сообщения от девушек, чтобы бот помогал в общении.")
 
 # Обработка пересланных сообщений
 @dp.message_handler(lambda message: message.forward_from is not None or message.forward_sender_name is not None)
-async def forwarded_message_handler(message: types.Message):
+def forwarded_message_handler(message: types.Message):
     girl_id = message.forward_from.id if message.forward_from else None
     username = message.forward_from.username if message.forward_from else message.forward_sender_name or "Неизвестно"
     text = message.text or message.caption or "[Нет текста]"
 
-    if girl_id:
-        async with await db_connection() as conn:
-            cursor = await conn.cursor()
-            await cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
-            girl = await cursor.fetchone()
+    conn = db_connection()
+    cursor = conn.cursor()
 
-            if girl:
-                new_preferences = (girl[0] or "") + f"\n{text}"
-                await cursor.execute("UPDATE girls SET preferences=? WHERE telegram_id=?", (new_preferences, girl_id))
-            else:
-                await cursor.execute("INSERT INTO girls (telegram_id, username, preferences) VALUES (?, ?, ?)", (girl_id, username, text))
-            await conn.commit()
+    cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
+    girl = cursor.fetchone()
 
+    if girl:
+        new_preferences = (girl["preferences"] or "") + f"\n{text}"
+        cursor.execute("UPDATE girls SET preferences=? WHERE telegram_id=?", (new_preferences, girl_id))
+    else:
+        cursor.execute("INSERT INTO girls (telegram_id, username, preferences) VALUES (?, ?, ?)", (girl_id, username, text))
+    
+    conn.commit()
+    conn.close()
+
+    # Кнопка "Помочь с ответом"
     keyboard = InlineKeyboardMarkup(row_width=1)
     keyboard.add(InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{girl_id or 'unknown'}"))
-    await message.reply(f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
+    
+    message.reply(f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
 
 # Обработка кнопки "Помочь с ответом"
 @dp.callback_query_handler(lambda c: c.data.startswith('reply_'))
-async def reply_to_girl(callback_query: types.CallbackQuery):
+def reply_to_girl(callback_query: types.CallbackQuery):
     girl_id = callback_query.data.split('_')[1]
 
     if girl_id == "unknown":
-        response = await generate_ai_response("Неизвестный собеседник, данных о предпочтениях нет.")
+        response = generate_ai_response("Неизвестный собеседник, данных о предпочтениях нет.")
     else:
-        async with await db_connection() as conn:
-            cursor = await conn.cursor()
-            await cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
-            girl_info = await cursor.fetchone()
+        conn = db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
+        girl_info = cursor.fetchone()
+        conn.close()
 
-        response = await generate_ai_response(girl_info[0] if girl_info else "Нет данных для анализа.")
+        response = generate_ai_response(girl_info["preferences"] if girl_info else "Нет данных для анализа.")
 
-    await bot.send_message(callback_query.from_user.id, response)
-    await callback_query.answer()
+    bot.send_message(callback_query.from_user.id, response)
+    callback_query.answer()
 
 # Генерация AI-ответа с использованием модели DeepInfra
-async def generate_ai_response(girl_preferences):
+def generate_ai_response(girl_preferences):
     prompt = f"Помоги пользователю ответить девушке. Её предпочтения: {girl_preferences}. Ответь естественно."
 
     try:
-        response = await openai.ChatCompletion.acreate(
+        response = openai.ChatCompletion.create(
             model="deepseek-ai/DeepSeek-R1",
             messages=[{"role": "system", "content": "Ты помощник в общении с девушками."},
                       {"role": "user", "content": prompt}],
@@ -114,30 +129,28 @@ async def generate_ai_response(girl_preferences):
 
 # Просмотр списка девушек
 @dp.message_handler(commands=['girls'])
-async def show_girls_list(message: types.Message):
-    async with await db_connection() as conn:
-        cursor = await conn.cursor()
+def show_girls_list(message: types.Message):
+    conn = db_connection()
+    cursor = conn.cursor()
 
-        try:
-            await cursor.execute("SELECT telegram_id, username FROM girls")
-            girls = await cursor.fetchall()
+    try:
+        cursor.execute("SELECT telegram_id, username FROM girls")
+        girls = cursor.fetchall()
 
-            if girls:
-                response = "Список сохранённых девушек:\n"
-                for girl in girls:
-                    username = f"@{girl[1]}" if girl[1] else "Неизвестно"
-                    response += f"ID: {girl[0]}, Username: {username}\n"
-                await message.answer(response)
-            else:
-                await message.answer("В базе нет сохранённых девушек.")
-        except Exception as e:
-            logging.error(f"Ошибка в /girls: {e}")
-            await message.answer("Произошла ошибка при получении списка девушек.")
+        if girls:
+            response = "Список сохранённых девушек:\n"
+            for girl in girls:
+                username = f"@{girl['username']}" if girl['username'] else "Неизвестно"
+                response += f"ID: {girl['telegram_id']}, Username: {username}\n"
+            message.answer(response)
+        else:
+            message.answer("В базе нет сохранённых девушек.")
+    except Exception as e:
+        logging.error(f"Ошибка в /girls: {e}")
+        message.answer("Произошла ошибка при получении списка девушек.")
+    finally:
+        conn.close()
 
 # Запуск бота
-async def main():
-    await create_db()  # Теперь инициализация базы данных происходит перед запуском бота
-    executor.start_polling(dp, skip_updates=True)
-
 if __name__ == '__main__':
-    asyncio.run(main())  # Используем asyncio.run() для запуска всего кода
+    executor.start_polling(dp, skip_updates=True)
