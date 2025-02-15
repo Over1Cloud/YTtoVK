@@ -40,7 +40,10 @@ async def create_db():
         )''')
         await conn.commit()
 
-asyncio.run(create_db())
+# Вместо asyncio.run() используем `on_startup`
+async def on_startup(_):
+    await create_db()
+    logging.info("База данных успешно инициализирована.")
 
 # Команда /start
 @dp.message_handler(commands=['start'])
@@ -138,4 +141,4 @@ async def show_girls_list(message: types.Message):
 
 # Запуск бота
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
