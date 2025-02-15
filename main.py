@@ -17,7 +17,9 @@ MAX_MESSAGE_LENGTH = 4096
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 dp.middleware.setup(LoggingMiddleware())
-openai.api_key = OPENAI_API_KEY
+
+# Инициализация OpenAI (новая версия)
+client = openai.AsyncOpenAI(api_key=OPENAI_API_KEY)
 
 # Логирование
 logging.basicConfig(level=logging.INFO)
@@ -66,93 +68,78 @@ async def cmd_start(message: types.Message):
     finally:
         conn.close()
 
-# Обработка пересланных сообщений
-@dp.message_handler(lambda message: message.forward_from is not None)
+# Обработка пересланных сообщений (работает даже с скрытым ID)
+@dp.message_handler(lambda message: message.forward_from is not None or message.forward_sender_name is not None)
 async def forwarded_message_handler(message: types.Message):
-    logging.info(f"Пересланное сообщение получено от: {message.forward_from.id}, username: {message.forward_from.username}")
+    logging.info(f"Пересланное сообщение получено: {message}")
 
-    girl_id = message.forward_from.id
-    username = message.forward_from.username or "Неизвестно"
+    girl_id = message.forward_from.id if message.forward_from else None
+    username = message.forward_from.username if message.forward_from else message.forward_sender_name or "Неизвестно"
     text = message.text or message.caption or "[Нет текста]"
 
-    conn = db_connection()
-    cursor = conn.cursor()
+    if girl_id:
+        # Если ID доступен, сохраняем в БД
+        conn = db_connection()
+        cursor = conn.cursor()
 
-    try:
-        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
-        girl = cursor.fetchone()
+        try:
+            cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
+            girl = cursor.fetchone()
 
-        if girl:
-            new_preferences = (girl['preferences'] or "") + f"\n{text}"
-            cursor.execute("UPDATE girls SET preferences=? WHERE telegram_id=?", (new_preferences, girl_id))
-        else:
-            cursor.execute("INSERT INTO girls (telegram_id, username, preferences) VALUES (?, ?, ?)", (girl_id, username, text))
-        
-        conn.commit()
-        logging.info(f"Данные для {username} (ID: {girl_id}) успешно записаны в БД.")
-    except Exception as e:
-        logging.error(f"Ошибка при сохранении предпочтений: {e}")
-    finally:
-        conn.close()
+            if girl:
+                new_preferences = (girl['preferences'] or "") + f"\n{text}"
+                cursor.execute("UPDATE girls SET preferences=? WHERE telegram_id=?", (new_preferences, girl_id))
+            else:
+                cursor.execute("INSERT INTO girls (telegram_id, username, preferences) VALUES (?, ?, ?)", (girl_id, username, text))
+            
+            conn.commit()
+            logging.info(f"Данные для {username} (ID: {girl_id}) успешно записаны в БД.")
+        except Exception as e:
+            logging.error(f"Ошибка при сохранении предпочтений: {e}")
+        finally:
+            conn.close()
 
-    keyboard = InlineKeyboardMarkup(row_width=2)
-    keyboard.add(
-        InlineKeyboardButton("Сохранить предпочтения", callback_data=f"save_{girl_id}"),
-        InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{girl_id}")
-    )
+    # Кнопка "Помочь с ответом"
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    keyboard.add(InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{girl_id or 'unknown'}"))
 
     await message.reply(f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
 
-# Обработка инлайн-кнопок
-@dp.callback_query_handler(lambda c: c.data.startswith('save_'))
-async def save_preferences(callback_query: types.CallbackQuery):
-    data_parts = callback_query.data.split('_')
-    if len(data_parts) != 2 or not data_parts[1].isdigit():
-        await callback_query.answer("Ошибка обработки команды.")
-        return
-
-    await bot.send_message(callback_query.from_user.id, "Предпочтения сохранены!")
-    await callback_query.answer()
-
+# Обработка кнопки "Помочь с ответом"
 @dp.callback_query_handler(lambda c: c.data.startswith('reply_'))
 async def reply_to_girl(callback_query: types.CallbackQuery):
-    data_parts = callback_query.data.split('_')
-    if len(data_parts) != 2 or not data_parts[1].isdigit():
-        await callback_query.answer("Ошибка обработки команды.")
-        return
+    girl_id = callback_query.data.split('_')[1]
 
-    girl_id = int(data_parts[1])
-
-    conn = db_connection()
-    cursor = conn.cursor()
-    try:
-        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
-        girl_info = cursor.fetchone()
-    except Exception as e:
-        logging.error(f"Ошибка при получении предпочтений: {e}")
-        girl_info = None
-    finally:
-        conn.close()
-
-    if girl_info:
-        response = await generate_ai_response(girl_info['preferences'])
-        await bot.send_message(callback_query.from_user.id, response)
+    if girl_id == "unknown":
+        response = await generate_ai_response("Неизвестный собеседник, данных о предпочтениях нет.")
     else:
-        await bot.send_message(callback_query.from_user.id, "Нет данных для анализа.")
+        conn = db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
+            girl_info = cursor.fetchone()
+        except Exception as e:
+            logging.error(f"Ошибка при получении предпочтений: {e}")
+            girl_info = None
+        finally:
+            conn.close()
 
+        response = await generate_ai_response(girl_info['preferences'] if girl_info else "Нет данных для анализа.")
+
+    await bot.send_message(callback_query.from_user.id, response)
     await callback_query.answer()
 
-# Генерация AI-ответа
+# Генерация AI-ответа (новая версия OpenAI API)
 async def generate_ai_response(girl_preferences):
     prompt = f"Помоги пользователю ответить девушке. Её предпочтения: {girl_preferences}. Ответь естественно."
 
     try:
-        response = await openai.ChatCompletion.create(
+        response = await client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=150
         )
-        return response['choices'][0]['message']['content'].strip()
+        return response.choices[0].message.content.strip()
     except Exception as e:
         logging.error(f"Ошибка при генерации AI-ответа: {e}")
         return "Произошла ошибка при генерации ответа."
