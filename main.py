@@ -23,27 +23,6 @@ openai.api_base = 'https://api.deepinfra.com/v1/openai'
 # Логирование
 logging.basicConfig(level=logging.INFO)
 
-# Функция для подключения к БД
-def db_connection():
-    return sqlite3.connect('preferences.db', isolation_level=None, check_same_thread=False)
-
-# Функция для создания таблиц
-def create_db():
-    with db_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-            user_id INTEGER PRIMARY KEY
-        )''')
-        cursor.execute('''CREATE TABLE IF NOT EXISTS girls (
-            girl_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            telegram_id TEXT UNIQUE,
-            username TEXT,
-            preferences TEXT
-        )''')
-
-# Создаём базу перед запуском бота
-create_db()
-
 # Функция отправки длинных сообщений
 async def send_long_message(chat_id, text):
     max_length = 4096  # Максимальная длина сообщения в Telegram
@@ -53,43 +32,35 @@ async def send_long_message(chat_id, text):
 # Команда /start
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
-    with db_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("INSERT OR IGNORE INTO users (user_id) VALUES (?)", (message.from_user.id,))
-    
     await message.answer("Привет! Пересылай сообщения от девушек, каналов или скрытых аккаунтов, чтобы бот помогал в общении.")
 
-# Обработка пересланных сообщений (от пользователей, скрытых аккаунтов, каналов)
+# Обработка пересланных сообщений (не записывает в БД, если ID не найден)
 @dp.message_handler(lambda message: message.forward_from or message.forward_sender_name or message.forward_from_chat)
 async def forwarded_message_handler(message: types.Message):
-    """Обрабатывает пересланные сообщения от пользователей, скрытых аккаунтов и каналов."""
+    """Обрабатывает пересланные сообщения от пользователей, скрытых аккаунтов и каналов без записи в БД, если ID не определён"""
+    
+    sender_id = None
+    username = "Неизвестно"
+
     if message.forward_from:  # Обычный пользователь
         sender_id = str(message.forward_from.id)
         username = message.forward_from.username or "Неизвестно"
     elif message.forward_from_chat:  # Канал
         sender_id = f"channel_{message.forward_from_chat.id}"
         username = message.forward_from_chat.title or "Без названия (Канал)"
-    else:  # Скрытый аккаунт
-        sender_id = "hidden_account"
+    elif message.forward_sender_name:  # Скрытый аккаунт
         username = message.forward_sender_name or "Скрытый пользователь"
 
     text = message.text or message.caption or "[Нет текста]"
 
-    with db_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (sender_id,))
-        girl = cursor.fetchone()
-
-        if girl:
-            new_preferences = (girl[0] or "") + f"\n{text}"
-            cursor.execute("UPDATE girls SET preferences=? WHERE telegram_id=?", (new_preferences, sender_id))
-        else:
-            cursor.execute("INSERT INTO girls (telegram_id, username, preferences) VALUES (?, ?, ?)", (sender_id, username, text))
+    # Если sender_id определён, можно записывать в БД (но сейчас этого не делаем)
+    if sender_id:
+        pass  # Можно добавить запись в БД, если понадобится
 
     # Кнопки: "Помочь с ответом" и "Анализ анкеты"
     keyboard = InlineKeyboardMarkup().add(
-        InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{sender_id}"),
-        InlineKeyboardButton("Анализ анкеты", callback_data=f"analyze_{sender_id}")
+        InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{sender_id or 'unknown'}"),
+        InlineKeyboardButton("Анализ анкеты", callback_data=f"analyze_{sender_id or 'unknown'}")
     )
 
     await message.answer(f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
@@ -99,12 +70,10 @@ async def forwarded_message_handler(message: types.Message):
 async def reply_to_girl(callback_query: types.CallbackQuery):
     sender_id = callback_query.data.split('_')[1]
 
-    with db_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (sender_id,))
-        girl_info = cursor.fetchone()
-
-    response = generate_ai_response(girl_info[0] if girl_info else "Нет данных для анализа.")
+    if sender_id == "unknown":
+        response = generate_ai_response("Неизвестный собеседник, данных о предпочтениях нет.")
+    else:
+        response = generate_ai_response("Нет данных для анализа.")  # БД не используется
 
     await send_long_message(callback_query.from_user.id, response)
     await callback_query.answer()
@@ -114,12 +83,10 @@ async def reply_to_girl(callback_query: types.CallbackQuery):
 async def analyze_profile_handler(callback_query: types.CallbackQuery):
     sender_id = callback_query.data.split('_')[1]
 
-    with db_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (sender_id,))
-        girl_info = cursor.fetchone()
-
-    analysis = analyze_profile_response(girl_info[0] if girl_info else "Нет данных для анализа.")
+    if sender_id == "unknown":
+        analysis = analyze_profile_response("Неизвестный собеседник, данных о предпочтениях нет.")
+    else:
+        analysis = analyze_profile_response("Нет данных для анализа.")  # БД не используется
 
     await send_long_message(callback_query.from_user.id, analysis)
     await callback_query.answer()
