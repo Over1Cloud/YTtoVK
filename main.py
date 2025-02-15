@@ -1,6 +1,10 @@
 import logging
 import requests
 import sqlite3
+import os
+import io
+from PyPDF2 import PdfReader
+from docx import Document
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
@@ -12,7 +16,7 @@ API_TOKEN = 'ВАШ_TELEGRAM_API_TOKEN'
 DEEPINFRA_API_KEY = 'ВАШ_DEEPINFRA_API_KEY'
 DEEPINFRA_API_BASE = 'https://api.deepinfra.com/v1'
 
-# ✅ Инициализация бота и диспетчера (aiogram 2.25.1)
+# ✅ Инициализация бота (aiogram 2.25.1)
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 dp.middleware.setup(LoggingMiddleware())
@@ -24,7 +28,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 def db_connection():
     return sqlite3.connect('chatbot.db', isolation_level=None, check_same_thread=False)
 
-# ✅ Создание таблицы пользователей
+# ✅ Создание базы данных
 def create_db():
     with db_connection() as conn:
         cursor = conn.cursor()
@@ -32,8 +36,38 @@ def create_db():
             user_id INTEGER PRIMARY KEY,
             selected_model TEXT DEFAULT 'deepseek-ai/DeepSeek-V3'
         )''')
+        cursor.execute('''CREATE TABLE IF NOT EXISTS messages (
+            user_id INTEGER,
+            message TEXT,
+            response TEXT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )''')
 
 create_db()
+
+# ✅ Сохранение истории сообщений
+def save_message(user_id, user_message, bot_response):
+    with db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO messages (user_id, message, response) VALUES (?, ?, ?)",
+                       (user_id, user_message, bot_response))
+        conn.commit()
+
+# ✅ Получение последних сообщений для контекста
+def get_message_history(user_id, limit=5):
+    with db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT message, response FROM messages WHERE user_id=? ORDER BY timestamp DESC LIMIT ?",
+                       (user_id, limit))
+        rows = cursor.fetchall()
+    
+    # Формируем историю в виде диалога
+    history = []
+    for row in reversed(rows):
+        history.append({"role": "user", "content": row[0]})
+        history.append({"role": "assistant", "content": row[1]})
+    
+    return history
 
 # ✅ Команда /start – выбор модели
 @dp.message_handler(commands=['start'])
@@ -64,7 +98,7 @@ async def process_model_selection(callback_query: types.CallbackQuery):
         cursor.execute("INSERT INTO users (user_id, selected_model) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET selected_model=?",
                        (user_id, selected_model, selected_model))
 
-    await bot.send_message(user_id, f"✅ Вы выбрали: `{selected_model}`.\nТеперь отправьте сообщение для общения или используйте команду `/generate_image` для создания изображения.")
+    await bot.send_message(user_id, f"✅ Вы выбрали: `{selected_model}`.\nТеперь просто отправьте сообщение.")
     await callback_query.answer()
 
 # ✅ Обработка текстовых сообщений
@@ -76,86 +110,60 @@ async def handle_message(message: types.Message):
         cursor.execute("SELECT selected_model FROM users WHERE user_id=?", (user_id,))
         result = cursor.fetchone()
 
-    selected_model = result[0] if result else "deepseek-ai/DeepSeek-V3"  # 🛠️ Фикс ошибки (tuple -> integer index)
+    selected_model = result[0] if result else "deepseek-ai/DeepSeek-V3"
+    logging.info(f"📝 Пользователь {user_id} использует модель: {selected_model}")
 
     if selected_model == 'black-forest-labs/FLUX-1-dev':
-        await message.answer("🎨 Эта модель для **генерации изображений**. Используйте команду `/generate_image`.")
-    else:
-        response = generate_text_response(selected_model, message.text)
-        await message.answer(response)
-
-# ✅ Функция для генерации текстового ответа
-def generate_text_response(model, user_input):
-    try:
-        url = f"{DEEPINFRA_API_BASE}/openai/chat/completions"
-        headers = {
-            "Authorization": f"Bearer {DEEPINFRA_API_KEY}",
-            "Content-Type": "application/json"
-        }
-        data = {
-            "model": model,
-            "messages": [
-                {"role": "system", "content": "Вы - дружелюбный AI-ассистент."},
-                {"role": "user", "content": user_input}
-            ],
-            "max_tokens": 150
-        }
-        response = requests.post(url, headers=headers, json=data)
-        if response.status_code == 200:
-            result = response.json()
-            return result['choices'][0]['message']['content'].strip()
-        else:
-            logging.error(f"Ошибка API DeepInfra: {response.status_code} - {response.text}")
-            return "❌ Ошибка при генерации ответа."
-    except Exception as e:
-        logging.error(f"Ошибка при генерации ответа: {e}")
-        return "❌ Ошибка при генерации ответа."
-
-# ✅ Команда для генерации изображений
-@dp.message_handler(commands=['generate_image'])
-async def generate_image(message: types.Message):
-    user_id = message.from_user.id
-    with db_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT selected_model FROM users WHERE user_id=?", (user_id,))
-        result = cursor.fetchone()
-
-    selected_model = result[0] if result else "black-forest-labs/FLUX-1-dev"
-
-    if selected_model == 'black-forest-labs/FLUX-1-dev':
-        prompt = message.get_args()
-        if not prompt:
-            await message.answer("⚠️ Укажите описание после `/generate_image`.")
-            return
-        image_url = generate_image_response(selected_model, prompt)
+        image_url = generate_image_response(selected_model, message.text)
         if image_url:
-            await message.answer_photo(image_url)
+            await message.answer_photo(image_url, caption=f"🎨 Сгенерировано по запросу:\n`{message.text}`")
         else:
             await message.answer("❌ Не удалось сгенерировать изображение.")
     else:
-        await message.answer("⚠️ Эта модель не поддерживает генерацию изображений. Выберите FLUX-1-dev.")
+        # Получаем историю общения
+        history = get_message_history(user_id)
+        
+        # Генерируем ответ с учетом контекста
+        response = generate_text_response(selected_model, message.text, history)
+        
+        # Сохраняем сообщение и ответ в БД
+        save_message(user_id, message.text, response)
 
-# ✅ Функция для генерации изображений
+        await message.answer(response)
+
+# ✅ Функция для генерации текстового ответа (с контекстом)
+def generate_text_response(model, user_input, history):
+    try:
+        url = f"{DEEPINFRA_API_BASE}/openai/chat/completions"
+        headers = {"Authorization": f"Bearer {DEEPINFRA_API_KEY}", "Content-Type": "application/json"}
+        
+        # Формируем полный контекст для запроса
+        messages = history + [{"role": "user", "content": user_input}]
+        
+        data = {
+            "model": model,
+            "messages": messages,
+            "max_tokens": 500
+        }
+
+        response = requests.post(url, headers=headers, json=data)
+        return response.json()['choices'][0]['message']['content'].strip()
+    except Exception as e:
+        logging.error(f"Ошибка генерации текста: {e}")
+        return "❌ Ошибка при обработке сообщения."
+
+# ✅ Функция генерации изображений через FLUX
 def generate_image_response(model, prompt):
     try:
         url = f"{DEEPINFRA_API_BASE}/models/{model}/generate"
-        headers = {
-            "Authorization": f"Bearer {DEEPINFRA_API_KEY}",
-            "Content-Type": "application/json"
-        }
+        headers = {"Authorization": f"Bearer {DEEPINFRA_API_KEY}", "Content-Type": "application/json"}
         data = {"prompt": prompt, "num_images": 1}
         response = requests.post(url, headers=headers, json=data)
-
-        if response.status_code == 200:
-            result = response.json()
-            return result['data'][0]['url']  # API должен возвращать URL изображения
-        else:
-            logging.error(f"Ошибка генерации изображения: {response.status_code} - {response.text}")
-            return None
+        return response.json()['data'][0]['url']
     except Exception as e:
         logging.error(f"Ошибка генерации изображения: {e}")
         return None
 
-# ✅ Запуск бота (aiogram 2.25.1)
+# ✅ Запуск бота
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
