@@ -62,7 +62,7 @@ def cmd_start(message: types.Message):
         conn.commit()
     
     conn.close()
-    message.answer("Привет! Пересылай сообщения от девушек, чтобы бот помогал в общении.")
+    bot.send_message(message.chat.id, "Привет! Пересылай сообщения от девушек, чтобы бот помогал в общении.")
 
 # Обработка пересланных сообщений
 @dp.message_handler(lambda message: message.forward_from is not None or message.forward_sender_name is not None)
@@ -90,7 +90,7 @@ def forwarded_message_handler(message: types.Message):
     keyboard = InlineKeyboardMarkup(row_width=1)
     keyboard.add(InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{girl_id or 'unknown'}"))
     
-    message.reply(f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
+    bot.send_message(message.chat.id, f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
 
 # Обработка кнопки "Помочь с ответом"
 @dp.callback_query_handler(lambda c: c.data.startswith('reply_'))
@@ -142,12 +142,12 @@ def show_girls_list(message: types.Message):
             for girl in girls:
                 username = f"@{girl['username']}" if girl['username'] else "Неизвестно"
                 response += f"ID: {girl['telegram_id']}, Username: {username}\n"
-            message.answer(response)
+            bot.send_message(message.chat.id, response)
         else:
-            message.answer("В базе нет сохранённых девушек.")
+            bot.send_message(message.chat.id, "В базе нет сохранённых девушек.")
     except Exception as e:
         logging.error(f"Ошибка в /girls: {e}")
-        message.answer("Произошла ошибка при получении списка девушек.")
+        bot.send_message(message.chat.id, "Произошла ошибка при получении списка девушек.")
     finally:
         conn.close()
 
