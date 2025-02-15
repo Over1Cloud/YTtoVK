@@ -16,7 +16,7 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 dp.middleware.setup(LoggingMiddleware())
 
-# Настройка OpenAI API для использования с DeepInfra
+# Настройка OpenAI API
 openai.api_key = DEEPINFRA_API_KEY
 openai.api_base = 'https://api.deepinfra.com/v1/openai'
 
@@ -25,131 +25,151 @@ logging.basicConfig(level=logging.INFO)
 
 # Функция для подключения к БД
 def db_connection():
-    conn = sqlite3.connect('preferences.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+    return sqlite3.connect('preferences.db', isolation_level=None, check_same_thread=False)
 
 # Функция для создания таблиц
 def create_db():
-    conn = db_connection()
-    cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-        user_id INTEGER PRIMARY KEY
-    )''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS girls (
-        girl_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        telegram_id INTEGER UNIQUE,
-        username TEXT,
-        preferences TEXT
-    )''')
-    conn.commit()
-    conn.close()
+    with db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY
+        )''')
+        cursor.execute('''CREATE TABLE IF NOT EXISTS girls (
+            girl_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            telegram_id TEXT UNIQUE,
+            username TEXT,
+            preferences TEXT
+        )''')
 
 # Создаём базу перед запуском бота
 create_db()
 
+# Функция отправки длинных сообщений
+async def send_long_message(chat_id, text):
+    max_length = 4096  # Максимальная длина сообщения в Telegram
+    for i in range(0, len(text), max_length):
+        await bot.send_message(chat_id, text[i:i+max_length])
+
 # Команда /start
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
-    conn = db_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT user_id FROM users WHERE user_id=?", (message.from_user.id,))
-    user = cursor.fetchone()
-
-    if not user:
-        cursor.execute("INSERT INTO users (user_id) VALUES (?)", (message.from_user.id,))
-        conn.commit()
+    with db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("INSERT OR IGNORE INTO users (user_id) VALUES (?)", (message.from_user.id,))
     
-    conn.close()
-    await bot.send_message(message.chat.id, "Привет! Пересылай сообщения от девушек, чтобы бот помогал в общении.")
+    await message.answer("Привет! Пересылай сообщения от девушек, каналов или скрытых аккаунтов, чтобы бот помогал в общении.")
 
-# Обработка пересланных сообщений
-@dp.message_handler(lambda message: message.forward_from is not None or message.forward_sender_name is not None)
+# Обработка пересланных сообщений (от пользователей, скрытых аккаунтов, каналов)
+@dp.message_handler(lambda message: message.forward_from or message.forward_sender_name or message.forward_from_chat)
 async def forwarded_message_handler(message: types.Message):
-    girl_id = message.forward_from.id if message.forward_from else None
-    username = message.forward_from.username if message.forward_from else message.forward_sender_name or "Неизвестно"
+    """Обрабатывает пересланные сообщения от пользователей, скрытых аккаунтов и каналов."""
+    if message.forward_from:  # Обычный пользователь
+        sender_id = str(message.forward_from.id)
+        username = message.forward_from.username or "Неизвестно"
+    elif message.forward_from_chat:  # Канал
+        sender_id = f"channel_{message.forward_from_chat.id}"
+        username = message.forward_from_chat.title or "Без названия (Канал)"
+    else:  # Скрытый аккаунт
+        sender_id = "hidden_account"
+        username = message.forward_sender_name or "Скрытый пользователь"
+
     text = message.text or message.caption or "[Нет текста]"
 
-    conn = db_connection()
-    cursor = conn.cursor()
+    with db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (sender_id,))
+        girl = cursor.fetchone()
 
-    cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
-    girl = cursor.fetchone()
+        if girl:
+            new_preferences = (girl[0] or "") + f"\n{text}"
+            cursor.execute("UPDATE girls SET preferences=? WHERE telegram_id=?", (new_preferences, sender_id))
+        else:
+            cursor.execute("INSERT INTO girls (telegram_id, username, preferences) VALUES (?, ?, ?)", (sender_id, username, text))
 
-    if girl:
-        new_preferences = (girl["preferences"] or "") + f"\n{text}"
-        cursor.execute("UPDATE girls SET preferences=? WHERE telegram_id=?", (new_preferences, girl_id))
-    else:
-        cursor.execute("INSERT INTO girls (telegram_id, username, preferences) VALUES (?, ?, ?)", (girl_id, username, text))
-    
-    conn.commit()
-    conn.close()
+    # Кнопки: "Помочь с ответом" и "Анализ анкеты"
+    keyboard = InlineKeyboardMarkup().add(
+        InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{sender_id}"),
+        InlineKeyboardButton("Анализ анкеты", callback_data=f"analyze_{sender_id}")
+    )
 
-    # Кнопка "Помочь с ответом"
-    keyboard = InlineKeyboardMarkup(row_width=1)
-    keyboard.add(InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{girl_id or 'unknown'}"))
-    
-    await bot.send_message(message.chat.id, f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
+    await message.answer(f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
 
 # Обработка кнопки "Помочь с ответом"
 @dp.callback_query_handler(lambda c: c.data.startswith('reply_'))
 async def reply_to_girl(callback_query: types.CallbackQuery):
-    girl_id = callback_query.data.split('_')[1]
+    sender_id = callback_query.data.split('_')[1]
 
-    if girl_id == "unknown":
-        response = generate_ai_response("Неизвестный собеседник, данных о предпочтениях нет.")
-    else:
-        conn = db_connection()
+    with db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (girl_id,))
+        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (sender_id,))
         girl_info = cursor.fetchone()
-        conn.close()
 
-        response = generate_ai_response(girl_info["preferences"] if girl_info else "Нет данных для анализа.")
+    response = generate_ai_response(girl_info[0] if girl_info else "Нет данных для анализа.")
 
-    await bot.send_message(callback_query.from_user.id, response)
+    await send_long_message(callback_query.from_user.id, response)
+    await callback_query.answer()
+
+# Обработка кнопки "Анализ анкеты"
+@dp.callback_query_handler(lambda c: c.data.startswith('analyze_'))
+async def analyze_profile_handler(callback_query: types.CallbackQuery):
+    sender_id = callback_query.data.split('_')[1]
+
+    with db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT preferences FROM girls WHERE telegram_id=?", (sender_id,))
+        girl_info = cursor.fetchone()
+
+    analysis = analyze_profile_response(girl_info[0] if girl_info else "Нет данных для анализа.")
+
+    await send_long_message(callback_query.from_user.id, analysis)
     await callback_query.answer()
 
 # Генерация AI-ответа с использованием модели DeepInfra
-def generate_ai_response(girl_preferences):
-    prompt = f"Помоги пользователю ответить девушке. Её предпочтения: {girl_preferences}. Ответь естественно."
+def generate_ai_response(preferences):
+    prompt = f"Помоги пользователю ответить. Данные о собеседнике: {preferences}. Ответь естественно."
 
     try:
         response = openai.ChatCompletion.create(
             model="deepseek-ai/DeepSeek-R1",
-            messages=[{"role": "system", "content": "Ты помощник в общении с девушками."},
-                      {"role": "user", "content": prompt}],
-            max_tokens=150
+            messages=[
+                {"role": "system", "content": "Ты помощник в общении."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=1000  # Длинные ответы
         )
         return response["choices"][0]["message"]["content"].strip()
     except Exception as e:
         logging.error(f"Ошибка при генерации AI-ответа: {e}")
         return "Ошибка при генерации ответа."
 
-# Просмотр списка девушек
-@dp.message_handler(commands=['girls'])
-async def show_girls_list(message: types.Message):
-    conn = db_connection()
-    cursor = conn.cursor()
+# Анализ анкеты
+def analyze_profile_response(preferences):
+    prompt = f"""
+    Проведи анализ анкеты на основе следующей информации:
+    {preferences}
+    
+    Оцени анкету по следующим критериям:
+    - Интересность и уникальность (0-10)
+    - Глубина раскрытия личности (0-10)
+    - Общая привлекательность для общения (0-10)
+    
+    Итоговый балл = среднее значение по этим параметрам.
+    Опиши плюсы и минусы анкеты и сделай вывод.
+    """
 
     try:
-        cursor.execute("SELECT telegram_id, username FROM girls")
-        girls = cursor.fetchall()
-
-        if girls:
-            response = "Список сохранённых девушек:\n"
-            for girl in girls:
-                username = f"@{girl['username']}" if girl['username'] else "Неизвестно"
-                response += f"ID: {girl['telegram_id']}, Username: {username}\n"
-            await bot.send_message(message.chat.id, response)
-        else:
-            await bot.send_message(message.chat.id, "В базе нет сохранённых девушек.")
+        response = openai.ChatCompletion.create(
+            model="deepseek-ai/DeepSeek-R1",
+            messages=[
+                {"role": "system", "content": "Ты аналитик анкет."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=1000
+        )
+        return response["choices"][0]["message"]["content"].strip()
     except Exception as e:
-        logging.error(f"Ошибка в /girls: {e}")
-        await bot.send_message(message.chat.id, "Произошла ошибка при получении списка девушек.")
-    finally:
-        conn.close()
+        logging.error(f"Ошибка при анализе анкеты: {e}")
+        return "Ошибка при анализе анкеты."
 
 # Запуск бота
 if __name__ == '__main__':
