@@ -50,7 +50,7 @@ create_db()
 
 # Команда /start
 @dp.message_handler(commands=['start'])
-def cmd_start(message: types.Message):
+async def cmd_start(message: types.Message):
     conn = db_connection()
     cursor = conn.cursor()
 
@@ -62,11 +62,11 @@ def cmd_start(message: types.Message):
         conn.commit()
     
     conn.close()
-    bot.send_message(message.chat.id, "Привет! Пересылай сообщения от девушек, чтобы бот помогал в общении.")
+    await bot.send_message(message.chat.id, "Привет! Пересылай сообщения от девушек, чтобы бот помогал в общении.")
 
 # Обработка пересланных сообщений
 @dp.message_handler(lambda message: message.forward_from is not None or message.forward_sender_name is not None)
-def forwarded_message_handler(message: types.Message):
+async def forwarded_message_handler(message: types.Message):
     girl_id = message.forward_from.id if message.forward_from else None
     username = message.forward_from.username if message.forward_from else message.forward_sender_name or "Неизвестно"
     text = message.text or message.caption or "[Нет текста]"
@@ -90,11 +90,11 @@ def forwarded_message_handler(message: types.Message):
     keyboard = InlineKeyboardMarkup(row_width=1)
     keyboard.add(InlineKeyboardButton("Помочь с ответом", callback_data=f"reply_{girl_id or 'unknown'}"))
     
-    bot.send_message(message.chat.id, f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
+    await bot.send_message(message.chat.id, f"Получено сообщение от {username}. Что сделать?", reply_markup=keyboard)
 
 # Обработка кнопки "Помочь с ответом"
 @dp.callback_query_handler(lambda c: c.data.startswith('reply_'))
-def reply_to_girl(callback_query: types.CallbackQuery):
+async def reply_to_girl(callback_query: types.CallbackQuery):
     girl_id = callback_query.data.split('_')[1]
 
     if girl_id == "unknown":
@@ -108,8 +108,8 @@ def reply_to_girl(callback_query: types.CallbackQuery):
 
         response = generate_ai_response(girl_info["preferences"] if girl_info else "Нет данных для анализа.")
 
-    bot.send_message(callback_query.from_user.id, response)
-    callback_query.answer()
+    await bot.send_message(callback_query.from_user.id, response)
+    await callback_query.answer()
 
 # Генерация AI-ответа с использованием модели DeepInfra
 def generate_ai_response(girl_preferences):
@@ -129,7 +129,7 @@ def generate_ai_response(girl_preferences):
 
 # Просмотр списка девушек
 @dp.message_handler(commands=['girls'])
-def show_girls_list(message: types.Message):
+async def show_girls_list(message: types.Message):
     conn = db_connection()
     cursor = conn.cursor()
 
@@ -142,12 +142,12 @@ def show_girls_list(message: types.Message):
             for girl in girls:
                 username = f"@{girl['username']}" if girl['username'] else "Неизвестно"
                 response += f"ID: {girl['telegram_id']}, Username: {username}\n"
-            bot.send_message(message.chat.id, response)
+            await bot.send_message(message.chat.id, response)
         else:
-            bot.send_message(message.chat.id, "В базе нет сохранённых девушек.")
+            await bot.send_message(message.chat.id, "В базе нет сохранённых девушек.")
     except Exception as e:
         logging.error(f"Ошибка в /girls: {e}")
-        bot.send_message(message.chat.id, "Произошла ошибка при получении списка девушек.")
+        await bot.send_message(message.chat.id, "Произошла ошибка при получении списка девушек.")
     finally:
         conn.close()
 
