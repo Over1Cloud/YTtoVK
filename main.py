@@ -8,7 +8,9 @@ from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 import asyncio
 
-# Конфигурация (API ключи должны быть настроены в коде вручную)
+# Конфигурация
+API_TOKEN = 'ВАШ_ТОКЕН'
+OPENAI_API_KEY = 'ВАШ_OPENAI_КЛЮЧ'
 MAX_MESSAGE_LENGTH = 4096
 
 # Инициализация бота и диспетчера
@@ -67,13 +69,11 @@ async def cmd_start(message: types.Message):
 # Обработка пересланных сообщений
 @dp.message_handler(lambda message: message.forward_from is not None)
 async def forwarded_message_handler(message: types.Message):
-    if not message.forward_from:
-        await message.reply("Не удалось определить отправителя сообщения.")
-        return
+    logging.info(f"Пересланное сообщение получено от: {message.forward_from.id}, username: {message.forward_from.username}")
 
     girl_id = message.forward_from.id
     username = message.forward_from.username or "Неизвестно"
-    text = message.text or ""
+    text = message.text or message.caption or "[Нет текста]"
 
     conn = db_connection()
     cursor = conn.cursor()
@@ -87,8 +87,9 @@ async def forwarded_message_handler(message: types.Message):
             cursor.execute("UPDATE girls SET preferences=? WHERE telegram_id=?", (new_preferences, girl_id))
         else:
             cursor.execute("INSERT INTO girls (telegram_id, username, preferences) VALUES (?, ?, ?)", (girl_id, username, text))
-
+        
         conn.commit()
+        logging.info(f"Данные для {username} (ID: {girl_id}) успешно записаны в БД.")
     except Exception as e:
         logging.error(f"Ошибка при сохранении предпочтений: {e}")
     finally:
