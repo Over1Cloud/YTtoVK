@@ -65,7 +65,7 @@ async def cmd_start(message: types.Message):
         conn.close()
 
 # Обработка пересланных сообщений
-@dp.message_handler(content_types=types.ContentType.FORWARDED)
+@dp.message_handler(lambda message: message.forward_from is not None)
 async def forwarded_message_handler(message: types.Message):
     if not message.forward_from:
         await message.reply("Не удалось определить отправителя сообщения.")
