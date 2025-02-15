@@ -1,16 +1,16 @@
+import asyncio
 import logging
-import openai
 import sqlite3
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils import executor
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-import asyncio
+import openai
 
 # Конфигурация
-API_TOKEN = 'ВАШ_ТОКЕН'
-OPENAI_API_KEY = 'ВАШ_OPENAI_КЛЮЧ'
+API_TOKEN = 'ВАШ_TELEGRAM_API_TOKEN'
+DEEPINFRA_API_KEY = 'ВАШ_DEEPINFRA_API_KEY'
 MAX_MESSAGE_LENGTH = 4096
 
 # Инициализация бота и диспетчера
@@ -18,8 +18,9 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 dp.middleware.setup(LoggingMiddleware())
 
-# Инициализация OpenAI (новая версия)
-client = openai.AsyncOpenAI(api_key=OPENAI_API_KEY)
+# Настройка клиента OpenAI для использования с DeepInfra
+openai.api_key = DEEPINFRA_API_KEY
+openai.api_base = 'https://api.deepinfra.com/v1/openai'
 
 # Логирование
 logging.basicConfig(level=logging.INFO)
@@ -68,7 +69,7 @@ async def cmd_start(message: types.Message):
     finally:
         conn.close()
 
-# Обработка пересланных сообщений (работает даже с скрытым ID)
+# Обработка пересланных сообщений
 @dp.message_handler(lambda message: message.forward_from is not None or message.forward_sender_name is not None)
 async def forwarded_message_handler(message: types.Message):
     logging.info(f"Пересланное сообщение получено: {message}")
@@ -129,17 +130,28 @@ async def reply_to_girl(callback_query: types.CallbackQuery):
     await bot.send_message(callback_query.from_user.id, response)
     await callback_query.answer()
 
-# Генерация AI-ответа (новая версия OpenAI API)
+# Генерация AI-ответа с использованием модели DeepInfra
 async def generate_ai_response(girl_preferences):
     prompt = f"Помоги пользователю ответить девушке. Её предпочтения: {girl_preferences}. Ответь естественно."
 
     try:
-        response = await client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=150
+        loop = asyncio.get_event_loop()
+        response = await loop.run_in_executor(
+            None,
+            lambda: openai.ChatCompletion.create(
+                model="deepseek-ai/DeepSeek-R1",
+                messages=[
+                    {"role": "system", "content": "Ты помощник в общении с девушками."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=150,
+                temperature=0.7,
+                top_p=0.9,
+                n=1,
+                stop=None
+            )
         )
-        return response.choices[0].message.content.strip()
+        return response.choices[0].message['content'].strip()
     except Exception as e:
         logging.error(f"Ошибка при генерации AI-ответа: {e}")
         return "Произошла ошибка при генерации ответа."
@@ -164,9 +176,10 @@ async def show_girls_list(message: types.Message):
             await message.answer("В базе нет сохранённых девушек.")
     except Exception as e:
         logging.error(f"Ошибка в /girls: {e}")
-        await message.answer("Произошла ошибка при получении списка девушек.")
+await message.answer("Произошла ошибка при получении списка девушек.")
     finally:
         conn.close()
 
+# Запуск бота
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
